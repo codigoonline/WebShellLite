@@ -1,8 +1,5 @@
----
+### `requirements.txt`
 
-### 📦 `requirements.txt`
-
-```txt
 flask
 flask-socketio
-eventleta
+eventlet
