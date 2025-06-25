@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meus Arquivos</title>
+<style>
+:root{
+  --grad-start:#1aa179;
+  --grad-end:#25e2a4;
+  --bg:#121212;
+  --surface:#1e1e1e;
+  --on-surface:#ffffffde;
+}
+*{box-sizing:border-box;font-family:Roboto,Arial,sans-serif;}
+body{
+  margin:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;
+  min-height:100vh;padding:24px;color:var(--on-surface);
+}
+h1{margin-bottom:24px;font-size:1.6rem;}
+ul{list-style:none;padding:0;margin:0;width:100%;max-width:500px;}
+li{
+  background:var(--surface);margin:8px 0;padding:12px;border-radius:8px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+a.dl{
+  text-decoration:none;font-size:.9rem;color:#000;padding:8px 14px;border-radius:6px;
+  background:linear-gradient(45deg,var(--grad-start),var(--grad-end));
+}
+a.dl:hover{opacity:.9;}
+.back{margin-top:32px;color:#1aa179;text-decoration:none;}
+.back:hover{color:#25e2a4;}
+</style>
+</head>
+<body>
+<h1>Meus Arquivos</h1>
+<ul>
+  {% for e in entries %}
+  <li>
+    <span>{{ e.name }}{% if e.is_dir %}/{% endif %}</span>
+    <a class="dl" href="/download/{{ e.name|urlencode }}">Baixar{% if e.is_dir %} .zip{% endif %}</a>
+  </li>
+  {% endfor %}
+</ul>
+<a href="/" class="back">← Voltar para WebShell</a>
+</body>
+</html>

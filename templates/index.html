@@ -1,1 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UMBRELLA ☂️</title>
+<style>
+:root{
+  --grad-start:#1aa179;
+  --grad-end:#25e2a4;
+  --bg:#121212;
+  --surface:#1e1e1e;
+  --on-surface:#ffffffde;
+  --border:#333;
+}
+*{box-sizing:border-box;font-family:Roboto,Arial,sans-serif;}
+body{
+  margin:0;background:var(--bg);display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:16px;color:var(--on-surface);
+}
+.card{
+  background:var(--surface);width:100%;max-width:500px;border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);padding:24px;
+}
+h1{margin:0 0 24px;font-size:1.6rem;}
+form{display:flex;flex-direction:column;gap:12px;}
+input[type=text]{
+  padding:12px 14px;font-size:1rem;border:1px solid var(--border);
+  border-radius:8px;background:#2c2c2c;color:var(--on-surface);
+}
+.btn{
+  padding:12px;font-size:1rem;border:none;border-radius:8px;
+  background:linear-gradient(45deg,var(--grad-start),var(--grad-end));
+  color:#000;cursor:pointer;transition:opacity .3s;
+}
+.btn:hover{opacity:.9;}
+.upload-wrapper{
+  margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+label.file-btn{
+  padding:10px 18px;font-size:1rem;border-radius:8px;cursor:pointer;
+  background:linear-gradient(45deg,var(--grad-start),var(--grad-end));color:#000;
+}
+label.file-btn:hover{opacity:.9;}
+input[type=file]{display:none;}
+#fileName{
+  font-size:.9rem;color:var(--on-surface);word-break:break-all;text-align:center;
+}
+pre{
+  background:#0f0f0f;color:#00ff00;padding:12px;border-radius:8px;
+  overflow:auto;max-height:40vh;white-space:pre-wrap;margin-top:28px;
+}
+.files-link{
+  margin-top:32px;display:block;text-align:center;font-size:.95rem;
+  color:#1aa179;text-decoration:none;
+}
+.files-link:hover{color:#25e2a4;}
+@media(max-width:600px){.card{padding:16px;}}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>UMBRELLA ☂️</h1>
 
+  <form id="cmdForm">
+    <input type="text" id="cmdInput" placeholder="Digite um comando" required>
+    <button type="submit" class="btn">Executar</button>
+  </form>
+
+  <form id="uploadForm" class="upload-wrapper" enctype="multipart/form-data">
+    <label class="file-btn">
+      Escolher Arquivo
+      <input type="file" id="fileInput" name="file" required>
+    </label>
+    <div id="fileName">Nenhum arquivo selecionado</div>
+    <button type="submit" class="btn">Enviar arquivo</button>
+  </form>
+
+  <a href="/files" class="files-link">📂 Ver e baixar arquivos ou pastas (.zip)</a>
+
+  <pre id="output" style="display:none;"></pre>
+</div>
+
+<script>
+const out=document.getElementById('output');
+
+document.getElementById('cmdForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const cmd=document.getElementById('cmdInput').value.trim();
+  if(!cmd)return;
+  out.style.display='block';out.textContent='Executando...';
+  try{
+    const r=await fetch('/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+    const d=await r.json();out.textContent=d.output||'';
+  }catch(err){out.textContent='Erro: '+err;}
+});
+
+document.getElementById('fileInput').addEventListener('change',()=>{
+  const f=document.getElementById('fileInput').files[0];
+  document.getElementById('fileName').textContent=f?f.name:'Nenhum arquivo selecionado';
+});
+
+document.getElementById('uploadForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=document.getElementById('fileInput').files[0];
+  if(!f)return;
+  const fd=new FormData();fd.append('file',f);
+  out.style.display='block';out.textContent='Enviando...';
+  try{
+    const r=await fetch('/upload',{method:'POST',body:fd});
+    const d=await r.json();out.textContent=d.msg||'';
+  }catch(err){out.textContent='Erro: '+err;}
+});
+</script>
+</body>
+</html>
