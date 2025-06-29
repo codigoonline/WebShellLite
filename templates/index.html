@@ -1,257 +1,298 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>UMBRELLA ☂️</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
-<style>
-:root {
-  --blue-start: #0a84ff;
-  --blue-end: #1e90ff;
-  --bg: #1c1c1e;
-  --surface: #2c2c2e;
-  --text: #ffffff;
-  --text-muted: #9a9a9a;
-  --border: #3a3a3c;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue-start: #0a84ff;
+      --blue-end: #1e90ff;
+      --bg: #1c1c1e;
+      --surface: #2c2c2e;
+      --text: #ffffff;
+      --text-muted: #9a9a9a;
+      --border: #3a3a3c;
+      --green: #00ff99;
+      --radius: 12px;
+    }
 
-* {
-  box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
-}
+    * {
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
 
-.card {
-  background: var(--surface);
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  padding: 24px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-}
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 700px;
+      padding: 32px 28px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
 
-h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 24px;
-}
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 28px;
+      color: var(--text);
+    }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
+    .terminal {
+      background: #2d2d2d;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
 
-input[type="text"] {
-  padding: 14px;
-  font-size: 1rem;
-  border-radius: 10px;
-  background: #3a3a3c;
-  border: 1px solid var(--border);
-  color: var(--text);
-}
+    .terminal-header {
+      background: #1e1e1e;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
 
-input[type="file"] {
-  display: none;
-}
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
 
-label.file-btn {
-  background: linear-gradient(45deg, var(--blue-start), var(--blue-end));
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: 10px;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  transition: opacity 0.3s;
-}
-label.file-btn:hover {
-  opacity: 0.9;
-}
+    .button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
 
-button {
-  padding: 14px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(45deg, var(--blue-start), var(--blue-end));
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-button:hover {
-  opacity: 0.9;
-}
+    .close { background: #ff5f56; }
+    .minimize { background: #ffbd2e; }
+    .maximize { background: #27c93f; }
 
-pre {
-  background: #111;
-  color: #00ff9f;
-  padding: 14px;
-  border-radius: 10px;
-  white-space: pre-wrap;
-  overflow-x: auto;
-  max-height: 300px;
-}
+    .terminal-body {
+      padding: 20px;
+      font-family: 'Fira Code', monospace;
+      font-size: 16px;
+      line-height: 1.6;
+    }
 
-.upload-wrapper {
-  margin-top: 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
+    .prompt { color: var(--green); }
+    .path { color: var(--blue-end); }
 
-#fileName {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  word-break: break-word;
-  text-align: center;
-}
+    .cmd-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
 
-.files-link {
-  display: block;
-  text-align: center;
-  margin-top: 20px;
-  font-size: 0.95rem;
-  color: var(--blue-start);
-  text-decoration: none;
-}
-.files-link:hover {
-  color: var(--blue-end);
-}
+    .command-input {
+      flex: 1 1 auto;
+      min-width: 150px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Fira Code', monospace;
+      font-size: 1rem;
+    }
 
-.progress-wrapper {
-  width: 100%;
-}
-#uploadProgress {
-  width: 100%;
-  height: 8px;
-  background: var(--border);
-  border-radius: 4px;
-}
-#uploadProgress::-webkit-progress-value {
-  background: linear-gradient(45deg, var(--blue-start), var(--blue-end));
-  border-radius: 4px;
-}
-</style>
+    .btn {
+      background: linear-gradient(45deg, var(--blue-start), var(--blue-end));
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .btn:hover { opacity: 0.9; }
+
+    .execute-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    pre#output {
+      background: #111;
+      color: #00ff9f;
+      padding: 16px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      max-height: 40vh;
+      margin-top: 16px;
+      display: none;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .upload-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    label.file-btn {
+      background: linear-gradient(45deg, var(--blue-start), var(--blue-end));
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+
+    label.file-btn:hover { opacity: 0.9; }
+
+    input[type="file"] { display: none; }
+
+    #fileName {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+      word-break: break-all;
+    }
+
+    .files-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: var(--blue-start);
+      text-decoration: none;
+    }
+
+    .files-link:hover { color: var(--blue-end); }
+  </style>
 </head>
 <body>
   <div class="card">
-    <h1>UMBRELLA ☂️</h1>
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="buttons">
+          <div class="button close"></div>
+          <div class="button minimize"></div>
+          <div class="button maximize"></div>
+        </div>
+      </div>
+      <div class="terminal-body">
+        <form id="cmdForm">
+          <datalist id="history"></datalist>
+          <div class="cmd-row">
+            <span class="prompt">user@macbook</span>:<span class="path">~</span>$
+            <input type="text" id="cmdInput" class="command-input" placeholder="Digite um comando" required list="history" />
+          </div>
+          <pre id="output"></pre>
+        </form>
+      </div>
+    </div>
 
-    <form id="cmdForm">
-      <datalist id="history"></datalist>
-      <input type="text" id="cmdInput" placeholder="Digite um comando" required list="history" />
-      <button type="submit">Executar</button>
-      <pre id="output" style="display:none;"></pre>
-    </form>
+    <!-- Botão "Executar" centralizado fora do terminal -->
+    <div class="execute-wrapper">
+      <button type="submit" form="cmdForm" class="btn">Executar</button>
+    </div>
 
+    <!-- Upload de arquivo -->
     <form id="uploadForm" class="upload-wrapper" enctype="multipart/form-data">
       <label class="file-btn">
         Escolher Arquivo
         <input type="file" id="fileInput" name="file" required />
       </label>
       <div id="fileName">Nenhum arquivo selecionado</div>
-      <div class="progress-wrapper">
-        <progress id="uploadProgress" value="0" max="100"></progress>
-      </div>
-      <button type="submit">Enviar arquivo</button>
+      <button type="submit" class="btn">Enviar arquivo</button>
     </form>
 
     <a href="/files" class="files-link">📂 Ver e baixar arquivos ou pastas (.zip)</a>
   </div>
 
   <script>
-  async function loadHistory() {
-    const res = await fetch('/history');
-    const data = await res.json();
-    const history = data.history || [];
-    const datalist = document.getElementById('history');
-    datalist.innerHTML = '';
-    history.forEach(cmd => {
-      const option = document.createElement('option');
-      option.value = cmd;
-      datalist.appendChild(option);
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', loadHistory);
-
-  document.getElementById('cmdForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const cmd = document.getElementById('cmdInput').value.trim();
-    const out = document.getElementById('output');
-    if (!cmd) return;
-    out.style.display = 'block';
-    out.textContent = 'Executando...';
-    try {
-      const r = await fetch('/run', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ command: cmd })
+    async function loadHistory() {
+      const res = await fetch('/history');
+      const data = await res.json();
+      const history = data.history || [];
+      const datalist = document.getElementById('history');
+      datalist.innerHTML = '';
+      history.forEach(cmd => {
+        const option = document.createElement('option');
+        option.value = cmd;
+        datalist.appendChild(option);
       });
-      const d = await r.json();
-      out.textContent = d.output || '';
-      await loadHistory();
-    } catch (err) {
-      out.textContent = 'Erro: ' + err;
     }
-  });
 
-  document.getElementById('fileInput').addEventListener('change', () => {
-    const f = document.getElementById('fileInput').files[0];
-    document.getElementById('fileName').textContent = f ? f.name : 'Nenhum arquivo selecionado';
-  });
+    document.addEventListener('DOMContentLoaded', loadHistory);
 
-  document.getElementById('uploadForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const f = document.getElementById('fileInput').files[0];
-    const out = document.getElementById('output');
-    const progressBar = document.getElementById('uploadProgress');
-    if (!f) return;
-    const fd = new FormData(); 
-    fd.append('file', f);
-    out.style.display = 'block';
-    out.textContent = 'Enviando...';
-    progressBar.value = 0;
+    document.getElementById('cmdForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const cmd = document.getElementById('cmdInput').value.trim();
+      const out = document.getElementById('output');
+      if (!cmd) return;
+      out.style.display = 'block';
+      out.textContent = 'Executando...';
+      try {
+        const r = await fetch('/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command: cmd })
+        });
+        const d = await r.json();
+        out.textContent = d.output || '';
+        await loadHistory();
+      } catch (err) {
+        out.textContent = 'Erro: ' + err;
+      }
+    });
 
-    try {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/upload');
-      xhr.upload.onprogress = function(e) {
-        if (e.lengthComputable) {
-          progressBar.value = (e.loaded / e.total) * 100;
-        }
-      };
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          const d = JSON.parse(xhr.responseText);
-          out.textContent = d.msg || '';
-        } else {
-          out.textContent = 'Erro: ' + xhr.statusText;
-        }
-      };
-      xhr.onerror = function() {
-        out.textContent = 'Erro na requisição';
-      };
-      xhr.send(fd);
-    } catch (err) {
-      out.textContent = 'Erro: ' + err;
-    }
-  });
+    document.getElementById('fileInput').addEventListener('change', () => {
+      const f = document.getElementById('fileInput').files[0];
+      document.getElementById('fileName').textContent = f ? f.name : 'Nenhum arquivo selecionado';
+    });
+
+    document.getElementById('uploadForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const f = document.getElementById('fileInput').files[0];
+      const out = document.getElementById('output');
+      if (!f) return;
+      const fd = new FormData();
+      fd.append('file', f);
+      out.style.display = 'block';
+      out.textContent = 'Enviando...';
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload');
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            const d = JSON.parse(xhr.responseText);
+            out.textContent = d.msg || '';
+          } else {
+            out.textContent = 'Erro: ' + xhr.statusText;
+          }
+        };
+        xhr.onerror = function () {
+          out.textContent = 'Erro na requisição';
+        };
+        xhr.send(fd);
+      } catch (err) {
+        out.textContent = 'Erro: ' + err;
+      }
+    });
   </script>
 </body>
 </html>
