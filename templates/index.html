@@ -1,191 +1,257 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>UMBRELLA ☂️</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
-:root{
-  --grad-start:#1aa179;
-  --grad-end:#25e2a4;
-  --bg:#121212;
-  --surface:#1e1e1e;
-  --on-surface:#ffffffde;
-  --border:#333;
+:root {
+  --blue-start: #0a84ff;
+  --blue-end: #1e90ff;
+  --bg: #1c1c1e;
+  --surface: #2c2c2e;
+  --text: #ffffff;
+  --text-muted: #9a9a9a;
+  --border: #3a3a3c;
 }
-*{box-sizing:border-box;font-family:Roboto,Arial,sans-serif;}
-body{
-  margin:0;background:var(--bg);display:flex;align-items:center;justify-content:center;
-  min-height:100vh;padding:16px;color:var(--on-surface);
+
+* {
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
 }
-.card{
-  background:var(--surface);width:100%;max-width:600px;border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,.4);padding:24px;
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
 }
-h1{margin:0 0 24px;font-size:1.6rem;}
-form{display:flex;flex-direction:column;gap:12px;}
-input[type=text]{
-  padding:12px 14px;font-size:1rem;border:1px solid var(--border);
-  border-radius:8px;background:#2c2c2c;color:var(--on-surface);
+
+.card {
+  background: var(--surface);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
-.btn{
-  padding:12px;font-size:1rem;border:none;border-radius:8px;
-  background:linear-gradient(45deg,var(--grad-start),var(--grad-end));
-  color:#000;cursor:pointer;transition:opacity .3s;
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 24px;
 }
-.btn:hover{opacity:.9;}
-.upload-wrapper{
-  margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:12px;
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
-label.file-btn{
-  padding:10px 18px;font-size:1rem;border-radius:8px;cursor:pointer;
-  background:linear-gradient(45deg,var(--grad-start),var(--grad-end));color:#000;
+
+input[type="text"] {
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 10px;
+  background: #3a3a3c;
+  border: 1px solid var(--border);
+  color: var(--text);
 }
-label.file-btn:hover{opacity:.9;}
-input[type=file]{display:none;}
-#fileName{font-size:.9rem;color:var(--on-surface);word-break:break-all;text-align:center;}
-pre{
-  background:#0f0f0f;color:#00ff00;padding:12px;border-radius:8px;
-  overflow:auto;max-height:40vh;white-space:pre-wrap;margin-top:16px;
+
+input[type="file"] {
+  display: none;
 }
-.files-link{
-  margin-top:20px;display:block;text-align:center;font-size:.95rem;
-  color:#1aa179;text-decoration:none;cursor:pointer;
+
+label.file-btn {
+  background: linear-gradient(45deg, var(--blue-start), var(--blue-end));
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity 0.3s;
 }
-.files-link:hover{color:#25e2a4;}
+label.file-btn:hover {
+  opacity: 0.9;
+}
+
+button {
+  padding: 14px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg, var(--blue-start), var(--blue-end));
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+button:hover {
+  opacity: 0.9;
+}
+
+pre {
+  background: #111;
+  color: #00ff9f;
+  padding: 14px;
+  border-radius: 10px;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-height: 300px;
+}
+
+.upload-wrapper {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#fileName {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  word-break: break-word;
+  text-align: center;
+}
+
+.files-link {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  color: var(--blue-start);
+  text-decoration: none;
+}
+.files-link:hover {
+  color: var(--blue-end);
+}
+
 .progress-wrapper {
-    width: 100%;
-    margin-top: 8px;
+  width: 100%;
 }
 #uploadProgress {
-    width: 100%;
-    height: 8px;
-    border-radius: 4px;
-    background: #333;
-}
-#uploadProgress::-webkit-progress-bar {
-    background: #333;
-    border-radius: 4px;
+  width: 100%;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
 }
 #uploadProgress::-webkit-progress-value {
-    background: linear-gradient(45deg, var(--grad-start), var(--grad-end));
-    border-radius: 4px;
+  background: linear-gradient(45deg, var(--blue-start), var(--blue-end));
+  border-radius: 4px;
 }
 </style>
 </head>
 <body>
-<div class="card">
-  <h1>UMBRELLA ☂️</h1>
+  <div class="card">
+    <h1>UMBRELLA ☂️</h1>
 
-  <form id="cmdForm">
-    <datalist id="history"></datalist>
-    <input type="text" id="cmdInput" placeholder="Digite um comando" required list="history">
-    <button type="submit" class="btn">Executar</button>
-    <pre id="output" style="display:none;"></pre>
-  </form>
+    <form id="cmdForm">
+      <datalist id="history"></datalist>
+      <input type="text" id="cmdInput" placeholder="Digite um comando" required list="history" />
+      <button type="submit">Executar</button>
+      <pre id="output" style="display:none;"></pre>
+    </form>
 
-  <form id="uploadForm" class="upload-wrapper" enctype="multipart/form-data">
-    <label class="file-btn">
-      Escolher Arquivo
-      <input type="file" id="fileInput" name="file" required>
-    </label>
-    <div id="fileName">Nenhum arquivo selecionado</div>
-    <div class="progress-wrapper">
-      <progress id="uploadProgress" value="0" max="100"></progress>
-    </div>
-    <button type="submit" class="btn">Enviar arquivo</button>
-  </form>
+    <form id="uploadForm" class="upload-wrapper" enctype="multipart/form-data">
+      <label class="file-btn">
+        Escolher Arquivo
+        <input type="file" id="fileInput" name="file" required />
+      </label>
+      <div id="fileName">Nenhum arquivo selecionado</div>
+      <div class="progress-wrapper">
+        <progress id="uploadProgress" value="0" max="100"></progress>
+      </div>
+      <button type="submit">Enviar arquivo</button>
+    </form>
 
-  <a href="/files" class="files-link">📂 Ver e baixar arquivos ou pastas (.zip)</a>
-</div>
+    <a href="/files" class="files-link">📂 Ver e baixar arquivos ou pastas (.zip)</a>
+  </div>
 
-<script>
-// Carregar histórico ao iniciar
-async function loadHistory() {
+  <script>
+  async function loadHistory() {
     const res = await fetch('/history');
     const data = await res.json();
     const history = data.history || [];
     const datalist = document.getElementById('history');
-    
-    // Limpar e adicionar histórico
     datalist.innerHTML = '';
     history.forEach(cmd => {
-        const option = document.createElement('option');
-        option.value = cmd;
-        datalist.appendChild(option);
+      const option = document.createElement('option');
+      option.value = cmd;
+      datalist.appendChild(option);
     });
-}
-
-document.addEventListener('DOMContentLoaded', loadHistory);
-
-document.getElementById('cmdForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const cmd = document.getElementById('cmdInput').value.trim();
-  const out = document.getElementById('output');
-  if (!cmd) return;
-  out.style.display = 'block';
-  out.textContent = 'Executando...';
-  try {
-    const r = await fetch('/run', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({command: cmd})
-    });
-    const d = await r.json();
-    out.textContent = d.output || '';
-    
-    // Recarregar histórico após comando
-    await loadHistory();
-  } catch (err) {
-    out.textContent = 'Erro: ' + err;
   }
-});
 
-document.getElementById('fileInput').addEventListener('change', () => {
-  const f = document.getElementById('fileInput').files[0];
-  document.getElementById('fileName').textContent = f ? f.name : 'Nenhum arquivo selecionado';
-});
+  document.addEventListener('DOMContentLoaded', loadHistory);
 
-document.getElementById('uploadForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const f = document.getElementById('fileInput').files[0];
-  const out = document.getElementById('output');
-  const progressBar = document.getElementById('uploadProgress');
-  if (!f) return;
-  const fd = new FormData(); 
-  fd.append('file', f);
-  out.style.display = 'block';
-  out.textContent = 'Enviando...';
-  progressBar.value = 0;
-  
-  try {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/upload');
-    
-    xhr.upload.onprogress = function(e) {
-      if (e.lengthComputable) {
-        progressBar.value = (e.loaded / e.total) * 100;
-      }
-    };
-    
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        const d = JSON.parse(xhr.responseText);
-        out.textContent = d.msg || '';
-      } else {
-        out.textContent = 'Erro: ' + xhr.statusText;
-      }
-    };
-    
-    xhr.onerror = function() {
-      out.textContent = 'Erro na requisição';
-    };
-    
-    xhr.send(fd);
-  } catch (err) {
-    out.textContent = 'Erro: ' + err;
-  }
-});
-</script>
+  document.getElementById('cmdForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const cmd = document.getElementById('cmdInput').value.trim();
+    const out = document.getElementById('output');
+    if (!cmd) return;
+    out.style.display = 'block';
+    out.textContent = 'Executando...';
+    try {
+      const r = await fetch('/run', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ command: cmd })
+      });
+      const d = await r.json();
+      out.textContent = d.output || '';
+      await loadHistory();
+    } catch (err) {
+      out.textContent = 'Erro: ' + err;
+    }
+  });
+
+  document.getElementById('fileInput').addEventListener('change', () => {
+    const f = document.getElementById('fileInput').files[0];
+    document.getElementById('fileName').textContent = f ? f.name : 'Nenhum arquivo selecionado';
+  });
+
+  document.getElementById('uploadForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = document.getElementById('fileInput').files[0];
+    const out = document.getElementById('output');
+    const progressBar = document.getElementById('uploadProgress');
+    if (!f) return;
+    const fd = new FormData(); 
+    fd.append('file', f);
+    out.style.display = 'block';
+    out.textContent = 'Enviando...';
+    progressBar.value = 0;
+
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/upload');
+      xhr.upload.onprogress = function(e) {
+        if (e.lengthComputable) {
+          progressBar.value = (e.loaded / e.total) * 100;
+        }
+      };
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const d = JSON.parse(xhr.responseText);
+          out.textContent = d.msg || '';
+        } else {
+          out.textContent = 'Erro: ' + xhr.statusText;
+        }
+      };
+      xhr.onerror = function() {
+        out.textContent = 'Erro na requisição';
+      };
+      xhr.send(fd);
+    } catch (err) {
+      out.textContent = 'Erro: ' + err;
+    }
+  });
+  </script>
 </body>
 </html>
