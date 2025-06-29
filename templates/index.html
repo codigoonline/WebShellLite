@@ -19,7 +19,7 @@ body{
   min-height:100vh;padding:16px;color:var(--on-surface);
 }
 .card{
-  background:var(--surface);width:100%;max-width:500px;border-radius:12px;
+  background:var(--surface);width:100%;max-width:600px;border-radius:12px;
   box-shadow:0 4px 12px rgba(0,0,0,.4);padding:24px;
 }
 h1{margin:0 0 24px;font-size:1.6rem;}
@@ -43,19 +43,34 @@ label.file-btn{
 }
 label.file-btn:hover{opacity:.9;}
 input[type=file]{display:none;}
-#fileName{
-  font-size:.9rem;color:var(--on-surface);word-break:break-all;text-align:center;
-}
+#fileName{font-size:.9rem;color:var(--on-surface);word-break:break-all;text-align:center;}
 pre{
   background:#0f0f0f;color:#00ff00;padding:12px;border-radius:8px;
-  overflow:auto;max-height:40vh;white-space:pre-wrap;margin-top:28px;
+  overflow:auto;max-height:40vh;white-space:pre-wrap;margin-top:16px;
 }
 .files-link{
-  margin-top:32px;display:block;text-align:center;font-size:.95rem;
-  color:#1aa179;text-decoration:none;
+  margin-top:20px;display:block;text-align:center;font-size:.95rem;
+  color:#1aa179;text-decoration:none;cursor:pointer;
 }
 .files-link:hover{color:#25e2a4;}
-@media(max-width:600px){.card{padding:16px;}}
+.progress-wrapper {
+    width: 100%;
+    margin-top: 8px;
+}
+#uploadProgress {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #333;
+}
+#uploadProgress::-webkit-progress-bar {
+    background: #333;
+    border-radius: 4px;
+}
+#uploadProgress::-webkit-progress-value {
+    background: linear-gradient(45deg, var(--grad-start), var(--grad-end));
+    border-radius: 4px;
+}
 </style>
 </head>
 <body>
@@ -63,8 +78,10 @@ pre{
   <h1>UMBRELLA ☂️</h1>
 
   <form id="cmdForm">
-    <input type="text" id="cmdInput" placeholder="Digite um comando" required>
+    <datalist id="history"></datalist>
+    <input type="text" id="cmdInput" placeholder="Digite um comando" required list="history">
     <button type="submit" class="btn">Executar</button>
+    <pre id="output" style="display:none;"></pre>
   </form>
 
   <form id="uploadForm" class="upload-wrapper" enctype="multipart/form-data">
@@ -73,43 +90,101 @@ pre{
       <input type="file" id="fileInput" name="file" required>
     </label>
     <div id="fileName">Nenhum arquivo selecionado</div>
+    <div class="progress-wrapper">
+      <progress id="uploadProgress" value="0" max="100"></progress>
+    </div>
     <button type="submit" class="btn">Enviar arquivo</button>
   </form>
 
   <a href="/files" class="files-link">📂 Ver e baixar arquivos ou pastas (.zip)</a>
-
-  <pre id="output" style="display:none;"></pre>
 </div>
 
 <script>
-const out=document.getElementById('output');
+// Carregar histórico ao iniciar
+async function loadHistory() {
+    const res = await fetch('/history');
+    const data = await res.json();
+    const history = data.history || [];
+    const datalist = document.getElementById('history');
+    
+    // Limpar e adicionar histórico
+    datalist.innerHTML = '';
+    history.forEach(cmd => {
+        const option = document.createElement('option');
+        option.value = cmd;
+        datalist.appendChild(option);
+    });
+}
 
-document.getElementById('cmdForm').addEventListener('submit',async e=>{
+document.addEventListener('DOMContentLoaded', loadHistory);
+
+document.getElementById('cmdForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const cmd=document.getElementById('cmdInput').value.trim();
-  if(!cmd)return;
-  out.style.display='block';out.textContent='Executando...';
-  try{
-    const r=await fetch('/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
-    const d=await r.json();out.textContent=d.output||'';
-  }catch(err){out.textContent='Erro: '+err;}
+  const cmd = document.getElementById('cmdInput').value.trim();
+  const out = document.getElementById('output');
+  if (!cmd) return;
+  out.style.display = 'block';
+  out.textContent = 'Executando...';
+  try {
+    const r = await fetch('/run', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({command: cmd})
+    });
+    const d = await r.json();
+    out.textContent = d.output || '';
+    
+    // Recarregar histórico após comando
+    await loadHistory();
+  } catch (err) {
+    out.textContent = 'Erro: ' + err;
+  }
 });
 
-document.getElementById('fileInput').addEventListener('change',()=>{
-  const f=document.getElementById('fileInput').files[0];
-  document.getElementById('fileName').textContent=f?f.name:'Nenhum arquivo selecionado';
+document.getElementById('fileInput').addEventListener('change', () => {
+  const f = document.getElementById('fileInput').files[0];
+  document.getElementById('fileName').textContent = f ? f.name : 'Nenhum arquivo selecionado';
 });
 
-document.getElementById('uploadForm').addEventListener('submit',async e=>{
+document.getElementById('uploadForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const f=document.getElementById('fileInput').files[0];
-  if(!f)return;
-  const fd=new FormData();fd.append('file',f);
-  out.style.display='block';out.textContent='Enviando...';
-  try{
-    const r=await fetch('/upload',{method:'POST',body:fd});
-    const d=await r.json();out.textContent=d.msg||'';
-  }catch(err){out.textContent='Erro: '+err;}
+  const f = document.getElementById('fileInput').files[0];
+  const out = document.getElementById('output');
+  const progressBar = document.getElementById('uploadProgress');
+  if (!f) return;
+  const fd = new FormData(); 
+  fd.append('file', f);
+  out.style.display = 'block';
+  out.textContent = 'Enviando...';
+  progressBar.value = 0;
+  
+  try {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/upload');
+    
+    xhr.upload.onprogress = function(e) {
+      if (e.lengthComputable) {
+        progressBar.value = (e.loaded / e.total) * 100;
+      }
+    };
+    
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        const d = JSON.parse(xhr.responseText);
+        out.textContent = d.msg || '';
+      } else {
+        out.textContent = 'Erro: ' + xhr.statusText;
+      }
+    };
+    
+    xhr.onerror = function() {
+      out.textContent = 'Erro na requisição';
+    };
+    
+    xhr.send(fd);
+  } catch (err) {
+    out.textContent = 'Erro: ' + err;
+  }
 });
 </script>
 </body>

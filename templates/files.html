@@ -30,15 +30,29 @@ a.dl{
 a.dl:hover{opacity:.9;}
 .back{margin-top:32px;color:#1aa179;text-decoration:none;}
 .back:hover{color:#25e2a4;}
+.path {
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  color: #888;
+}
 </style>
 </head>
 <body>
 <h1>Meus Arquivos</h1>
+<div class="path">Caminho: {{ current_path or '~' }}</div>
 <ul>
   {% for e in entries %}
   <li>
-    <span>{{ e.name }}{% if e.is_dir %}/{% endif %}</span>
-    <a class="dl" href="/download/{{ e.name|urlencode }}">Baixar{% if e.is_dir %} .zip{% endif %}</a>
+    {% if e.is_dir %}
+      <span>{{ e.name }}/</span>
+      <div>
+        <a class="dl" href="/files/{{ e.path | urlencode }}">Abrir</a>
+        <a class="dl" href="/download/{{ e.path | urlencode }}" style="margin-left:8px">zip</a>
+      </div>
+    {% else %}
+      <span>{{ e.name }}</span>
+      <a class="dl" href="/download/{{ e.path | urlencode }}">Baixar</a>
+    {% endif %}
   </li>
   {% endfor %}
 </ul>
